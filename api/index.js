@@ -10,6 +10,10 @@ var app = express();
 var cors = require('cors');
 app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
 
+// body parseu
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: false}))
+
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
 
@@ -23,6 +27,11 @@ app.use(express.static('public'));
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
+
+// url shortener
+app.post('/api/shorturl', function(req, res) {
+  return res.json({status: 200});
+})
 
 // parse request header
 app.get("/api/whoami", function (req, res) {
