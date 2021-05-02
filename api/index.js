@@ -24,6 +24,15 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+// parse request header
+app.get("/api/whoami", function (req, res) {
+  return res.json({
+    ipaddress: '',
+    language: "",
+    software: ""
+  })
+});
+
 // timestamp service
 app.get("/api/:dateOrTimestamp?", function (req, res) {
   if(!req.params.dateOrTimestamp) {
@@ -47,14 +56,6 @@ app.get("/api/:dateOrTimestamp?", function (req, res) {
   res.json({
     unix: dateOrTimestamp.valueOf(),
     utc: dateOrTimestamp.toUTCString()
-  })
-});
-
-app.get("/api/whoami", function (req, res) {
-  return res.json({
-    ipaddress: '',
-    language: "",
-    software: ""
   })
 });
 
