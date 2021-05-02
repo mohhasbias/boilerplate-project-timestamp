@@ -27,9 +27,9 @@ app.get("/api/hello", function (req, res) {
 // parse request header
 app.get("/api/whoami", function (req, res) {
   return res.json({
-    ipaddress: '',
-    language: "",
-    software: ""
+    ipaddress: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+    language: req.acceptsLanguages()[0],
+    software: req.headers['user-agent']
   })
 });
 
