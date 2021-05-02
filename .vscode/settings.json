@@ -1,3 +1,9 @@
 {
-  "standard.enable": false
+  "standard.enable": false,
+  "appService.zipIgnorePattern": [
+    "node_modules{,/**}",
+    ".vscode{,/**}"
+  ],
+  "appService.defaultWebAppToDeploy": "/subscriptions/fed92996-f177-44a4-9e2f-2a35d4dcdc04/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/timestamp-service",
+  "appService.deploySubpath": "."
 }
