@@ -14,9 +14,9 @@ app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 20
 app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/api", function (req, res) {
-  res.sendFile(__dirname + '/views/index.html');
-});
+// app.get("/api", function (req, res) {
+//   res.sendFile(__dirname + '/views/index.html');
+// });
 
 
 // your first API endpoint... 
@@ -25,10 +25,25 @@ app.get("/api/hello", function (req, res) {
 });
 
 // timestamp service
-app.get("/api/:dateOrTimestamp", function (req, res) {
+app.get("/api/:dateOrTimestamp?", function (req, res) {
+  if(!req.params.dateOrTimestamp) {
+    return res.json({
+      unix: new Date().valueOf(),
+      utc: new Date().toUTCString()
+    });
+  }
+  
   const dateOrTimestamp = new Date(req.params.dateOrTimestamp).getTime() > 0
     ? new Date(req.params.dateOrTimestamp)
     : new Date(parseInt(req.params.dateOrTimestamp))
+
+  
+  const isValid = dateOrTimestamp.getTime() > 0;
+
+  if(!isValid) {
+    return res.json({ error: "Invalid Date"})
+  }
+
   res.json({
     unix: dateOrTimestamp.valueOf(),
     utc: dateOrTimestamp.toUTCString()
