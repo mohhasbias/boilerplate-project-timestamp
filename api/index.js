@@ -3,6 +3,7 @@
 
 var dns = require('dns');
 var { URL } = require('url');
+var validator = require('validator');
 
 // init project
 var express = require('express');
@@ -35,6 +36,9 @@ app.get("/api/hello", function (req, res) {
 const lookupTable = []
 
 app.post('/api/shorturl', function(req, res, next) {
+  if(!validator.isURL(req.body.url)) {
+    return res.json({error: 'invalid url'});
+  }
   const url = new URL(req.body.url);
   dns.lookup(url.hostname, (err) => {
     if(err) {
