@@ -1,6 +1,9 @@
 // server.js
 // where your node app starts
 
+var dns = require('dns');
+var { URL } = require('url');
+
 // init project
 var express = require('express');
 var app = express();
@@ -29,9 +32,29 @@ app.get("/api/hello", function (req, res) {
 });
 
 // url shortener
-app.post('/api/shorturl', function(req, res) {
-  return res.json({status: 200});
-})
+const lookupTable = []
+
+app.post('/api/shorturl', function(req, res, next) {
+  const url = new URL(req.body.url);
+  dns.lookup(url.hostname, (err) => {
+    if(err) {
+      return res.json({error: 'invalid url'})
+    }
+    lookupTable.push(req.body.url);
+    return res.json({
+      original_url: req.body.url,
+      short_url: lookupTable.length-1
+    });
+  });
+});
+
+app.get('/api/shorturl/:id', function (req, res) {
+  res.redirect(lookupTable[req.params.id])
+});
+
+app.get('/api/shorturl', function(req, res) {
+
+});
 
 // parse request header
 app.get("/api/whoami", function (req, res) {
