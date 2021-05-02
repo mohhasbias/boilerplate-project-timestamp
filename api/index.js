@@ -14,7 +14,7 @@ app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 20
 app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (req, res) {
+app.get("/api", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
@@ -24,7 +24,16 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-
+// timestamp service
+app.get("/api/:dateOrTimestamp", function (req, res) {
+  const dateOrTimestamp = new Date(req.params.dateOrTimestamp).getTime() > 0
+    ? new Date(req.params.dateOrTimestamp)
+    : new Date(parseInt(req.params.dateOrTimestamp))
+  res.json({
+    unix: dateOrTimestamp.valueOf(),
+    utc: dateOrTimestamp.toUTCString()
+  })
+});
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
